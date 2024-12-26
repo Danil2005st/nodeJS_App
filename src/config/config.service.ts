@@ -1,5 +1,5 @@
 import { IConfigService } from './config.service.interface';
-import { DotenvConfigOutput, DotenvParseOutput } from 'dotenv';
+import { config, DotenvConfigOutput, DotenvParseOutput } from 'dotenv';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interface';
@@ -11,12 +11,13 @@ export class ConfigService implements IConfigService {
   constructor(@inject(TYPES.ILogger) private logger: ILogger) {
     const result: DotenvConfigOutput = config();
     if (result.error) {
-      this.logger.error('There was an error loading the .env file.');
+      this.logger.error('[ConfigService] There was an error loading the .env file.');
     } else {
+      this.logger.log('[ConfigService] Loaded .env file successfully');
       this.config = result.parsed as DotenvParseOutput;
     }
   }
-  get<T extends string | number>(key: string): T {
-    return this.config[key] as T;
+  get(key: string): string {
+    return this.config[key];
   }
 }
