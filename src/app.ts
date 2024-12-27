@@ -50,4 +50,8 @@ export class App {
     this.server = this.app.listen(this.port);
     this.logger.log(`Server running at http://localhost:${this.port}/`);
   }
+
+  public async close(): Promise<void> {
+    this.server.close();
+  }
 }
